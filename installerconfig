@@ -1,0 +1,88 @@
+PARTITIONS=vtbd0
+DISTRIBUTIONS="kernel.txz base.txz joyent.txz"
+
+#!/bin/sh
+
+set -o xtrace
+echo "==> Running installerconfig"
+
+# Enable serial and internal consoles
+echo "==> Enabling serial and internal consoles"
+echo "-Dh" > /boot.config
+echo "cuau0   \"/usr/libexec/getty std.38400\"  xterm   on  secure" >> /etc/ttys
+
+echo "==> Setting autoboot delay to 5 seconds. Default is 10"
+echo "autoboot_delay=\"5\"" >> /boot/loader.conf
+
+echo "==> Setting up rc.conf"
+cat > /etc/rc.conf << RC_CONF
+fsck_y_enable="YES"
+dumpdev="AUTO"
+
+# Enable SmartDataCenter support. Do not remove.
+smartdc_enable="YES"
+
+sshd_enable="YES"
+ntpd_enable="YES"
+ntpd_sync_on_start="YES"
+
+RC_CONF
+
+# Set Time Zone to UTC
+echo "==> Setting Time Zone to UTC"
+/bin/cp /usr/share/zoneinfo/UTC /etc/localtime
+/usr/bin/touch /etc/wall_cmos_clock
+/sbin/adjkerntz -a
+
+# Fetch and install binary updates. Ensures we have the latest security fixes.
+echo "==> Running freebsd-update fetch and freebsd-update install"
+# Remove src from update since it's not installed
+# See https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=198030
+sed -i.bak -e s/Components\ src\ world\ kernel/Components\ world\ kernel/g /etc/freebsd-update.conf
+
+env PAGER=cat freebsd-update fetch
+freebsd-update install
+
+echo "==> Installing packages"
+env ASSUME_ALWAYS_YES=YES pkg update -f
+env ASSUME_ALWAYS_YES=YES pkg install -y bash curl node npm vim wget
+
+echo "== Enable root login via ssh"
+sed -i.bak -e s/#PermitRootLogin\ no/PermitRootLogin\ without-password/g /etc/ssh/sshd_config
+
+## Build date used for motd and product file
+BUILDDATE=$(date +%Y%m%d)
+RELEASE="10.2-RELEASE"
+DOC_URL="https://docs.joyent.com/images/freebsd"
+
+# Create MOTD
+echo "Creating /etc/motd"
+mv /etc/motd /etc/motd-backup
+cat << MOTD > /etc/motd
+   __        .                   .
+ _|  |_      | .-. .  . .-. :--. |-
+|_    _|     ;|   ||  |(.-' |  | |
+  |__|   \`--'  \`-' \`;-| \`-' '  ' \`-'
+                   /  ;  Instance (FreeBSD $RELEASE $BUILDDATE)
+                   \`-'   $DOC_URL
+
+MOTD
+
+# Create product file
+echo "Creating /etc/product file"
+cat << PRODUCT > /etc/product
+Name: Joyent Instance
+Image: FreeBSD $RELEASE $BUILDDATE
+Documentation: $DOC_URL
+Description: FreeBSD $RELEASE 64-bit image with just essential packages \
+installed. Ideal for users who are comfortable with setting up their \
+own environment and tools.
+PRODUCT
+
+echo "Cleaning up"
+rm -rf /tmp/installscript
+
+echo "End of installerconfig"
+
+# Shutdown/Poweroff
+poweroff
