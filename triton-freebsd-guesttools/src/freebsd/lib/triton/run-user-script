@@ -1,6 +1,6 @@
 #!/usr/local/bin/bash
 #
-# Copyright (c) 2014 Joyent Inc., All rights reserved.
+# Copyright (c) 2016 Joyent Inc., All rights reserved.
 #
 # Script that will use mdata field of run_userscript_flag
 # If field is set to TRUE, when this script is ran, then the mdata user-script 
@@ -10,7 +10,7 @@
 # This script is executed on each system boot
 
 # load common functions and vars
-. /lib/smartdc/lib_smartdc_scripts.cfg
+. /lib/triton/lib_triton_scripts.cfg
 
 # set run_userscript_flag to the string TRUE 
 # to remove $USER_SCRIPT_LOCKFILE so that userscript is ran
@@ -19,8 +19,8 @@ run_userscript_flag=$($MDATA_GET_BIN run_userscript_flag 2>>/dev/console)
 # Convert to lowercase
 userscript_flag=$(echo $run_userscript_flag | tr '[:upper:]' '[:lower:]')
 if [[ "$userscript_flag" = "true" ]]; then
-  lib_smartdc_info "run_userscript_flag field set to: $run_userscript_flag"
-  lib_smartdc_info "Removing $USER_SCRIPT_LOCKFILE"
+  lib_triton_info "run_userscript_flag field set to: $run_userscript_flag"
+  lib_triton_info "Removing $USER_SCRIPT_LOCKFILE"
   rm -f $USER_SCRIPT_LOCKFILE 
 fi
 
@@ -29,13 +29,13 @@ if [[ $? -eq 0 ]] ; then
     if [[ ! -f $USER_SCRIPT_LOCKFILE ]] ; then
       touch $USER_SCRIPT_LOCKFILE 
       chmod +x $USER_SCRIPT_FILE 
-      lib_smartdc_info "Executing $USER_SCRIPT_FILE"
+      lib_triton_info "Executing $USER_SCRIPT_FILE"
       $USER_SCRIPT_FILE
-      lib_smartdc_info "$USER_SCRIPT_FILE return value is '$?'"
+      lib_triton_info "$USER_SCRIPT_FILE return value is '$?'"
     else 
-      lib_smartdc_info "$USER_SCRIPT_LOCKFILE exist - not running \
+      lib_triton_info "$USER_SCRIPT_LOCKFILE exist - not running \
         $USER_SCRIPT_FILE"
     fi
 else
-    lib_smartdc_info "$MDATA_GET_BIN did not return a valid user-script"
+    lib_triton_info "$MDATA_GET_BIN did not return a valid user-script"
 fi

@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# PROVIDE: triton
+
+# Adds support for Triton (and SmartOS)
+
+. /etc/rc.subr
+
+name="triton"
+stop_cmd=":"
+
+(/lib/triton/add-network-interface)
+(/lib/triton/set-hostname)
+(/lib/triton/set-root-authorized-keys)
+if [ ! -f /lib/triton/.firstboot-complete-do-not-delete ] ; then
+  (/lib/triton/firstboot)
+fi
+(/lib/triton/run-operator-script)
+(/lib/triton/get-user-data)
+(/lib/triton/run-user-script)
