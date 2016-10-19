@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (c) 2011 Joyent Inc., All rights reserved.
+# Copyright (c) 2016 Joyent Inc., All rights reserved.
 #
 
 set -o errexit
@@ -13,21 +13,21 @@ SUM=/usr/bin/sum
 function usage
 {
     cat <<USAGE
-Usage: $0 -f filename -n <name> -s <size> -v <version> [options]
+Usage: $0 -f filename -n <name> -s <size> -v <version>
 
-    -d <image description> (optional, default: "<NAME> <VERSION> VM Image")
+    -d <image description> (optional, default: "<NAME> <VERSION> KVM Image")
     -D <disk driver> (optional, default: "virtio")
     -f <filename of VM image> (required)
     -n <name of VM image> (required)
     -N <NIC driver> (optional, default: "virtio")
-    -o <OS name> (optional, default: argument to -n)
+    -o <OS name> (optional, default: bsd)
     -s <size of virtual disk (as seen by VM, MiB)> (required)
     -v <version of VM image> (required)
     -h <homepage link> (optional)
 
 Example:
 
-    $0 -f ubuntu-10.04.2.img.gz -s 5120 -n ubuntu -v 10.04.2
+    $0 -f freebsd-11-20161019.zfs.gz -n freebsd-11 -s 10240 -v 20161019 -o bsd
 
 USAGE
     exit 1
@@ -74,11 +74,11 @@ if [[ -z ${filename} || -z ${name} || -z ${version} || -z ${image_size} ]]; then
 fi
 
 if [[ -z ${description} ]]; then
-    description="${name} ${version} VM image"
+    description="${name} ${version} KVM image"
 fi
 
 if [[ -z ${os} ]]; then
-    os=other
+    os=bsd
 fi
 
 if [[ -z ${homepage} ]]; then
