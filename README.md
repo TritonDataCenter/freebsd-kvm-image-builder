@@ -11,7 +11,7 @@ This must be run on a FreeBSD machine or VirtualMachine.
 The following packages are required:
 
 ```
-pkg install -y bash rsync cdrtools git
+pkg install -y bash rsync cdrtools
 ```
 
 ## Usage
@@ -22,5 +22,7 @@ To build a custom ISO, run the `create-iso` script:
 ```
 ./create-iso -r <RELEASE> -m <MIRROR> -p <MIRROR_PATH> -i <ISO> -c <ISO_CHECKSUM> -d <ISO_DIR> -M <MOUNT_POINT> -l <ISO_LAYOUT> -f <ISO_FILENAME>
 ```
+
+see `./create-iso -h` for usage
 
 This will download an ISO, created a customized layout with installerconfig, install the Triton guesttools then build the custom ISO.
