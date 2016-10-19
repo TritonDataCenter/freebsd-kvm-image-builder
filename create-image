@@ -224,7 +224,7 @@ function create_file {
 
 function create_manifest {
   echo "==> Creating manifest file..."
-  ./sdc-vmmanifest -f ${IMAGE_NAME}-${BUILD_DATE}.zfs.gz -n ${IMAGE_NAME} -s 10240 -v ${BUILD_DATE} -d "$DESC" -h $HOMEPAGE -o bsd > ${IMAGE_NAME}-${BUILD_DATE}.json
+  ./create-image-manifest -f ${IMAGE_NAME}-${BUILD_DATE}.zfs.gz -n ${IMAGE_NAME} -s 10240 -v ${BUILD_DATE} -d "$DESC" -h $HOMEPAGE -o bsd > ${IMAGE_NAME}-${BUILD_DATE}.json
   echo "==> done!"
   echo "==>"
 }
