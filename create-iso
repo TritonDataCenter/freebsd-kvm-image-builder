@@ -25,7 +25,7 @@ usage() {
 cat <<EOF
 
 Create a custom Fedora ISO with the necessary packages and tooling installed 
-for deploying on SmartOS, SDC and the Joyent Public Cloud.
+for deploying on SmartOS, Triton and the Joyent Public Cloud.
 
 Usage:
   $0 -r <RELEASE> -m <MIRROR> -p <MIRROR_PATH> -i <ISO> -c <ISO_CHECKSUM> -d <ISO_DIR> -M <MOUNT_POINT> -l <ISO_LAYOUT> -f <ISO_FILENAME>
