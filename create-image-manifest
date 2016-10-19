@@ -82,7 +82,7 @@ if [[ -z ${os} ]]; then
 fi
 
 if [[ -z ${homepage} ]]; then
-    homepage=http://wiki.joyent.com/
+    homepage=http://docs.joyent.com/
 fi
 
 if [[ ! -f ${filename} ]]; then
