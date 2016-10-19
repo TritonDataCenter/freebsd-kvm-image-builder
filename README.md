@@ -1,7 +1,6 @@
-# mi-freebsd-10
+# freebsd-kvm-image-builder
 
-This repo allows one to create a custom ISO with the necessary packages and
-tooling for deploying on SmartOS and Joyent Public Cloud.
+This repo creates a custom FreeBSD install ISO and a KVM image for use in SmartOS and Triton.
 
 ## Requirements
 
@@ -9,7 +8,7 @@ This must be run on a FreeBSD machine or VirtualMachine.
 
 ## Setup
 
-Before using mi-freebsd-10, please install the following packages:
+The following packages are required:
 
 ```
 pkg install -y bash rsync cdrtools git
@@ -17,22 +16,11 @@ pkg install -y bash rsync cdrtools git
 
 ## Usage
 
-To build a custom ISO, run the `build_freebsd_iso` script:
+To build a custom ISO, run the `create-iso` script:
 
 
 ```
-./build_freebsd_iso
+./create-iso -r <RELEASE> -m <MIRROR> -p <MIRROR_PATH> -i <ISO> -c <ISO_CHECKSUM> -d <ISO_DIR> -M <MOUNT_POINT> -l <ISO_LAYOUT> -f <ISO_FILENAME>
 ```
 
-This will download an ISO, created a customized layout with installerconfig, then build the custom ISO.
-
-
-## Customizing
-You can modify the following if you'd prefer a different ISO, architexture, or FreeBSD mirror:
-
-```
-MIRROR="ftp.freebsd.org"
-MIRROR_PATH="pub/FreeBSD/releases/amd64/amd64/ISO-IMAGES"
-ISO="FreeBSD-10.1-RELEASE-amd64-disc1.iso"
-CUSTOM_ISO_FILENAME="freebsd-10-custom.iso"
-```
+This will download an ISO, created a customized layout with installerconfig, install the Triton guesttools then build the custom ISO.
