@@ -26,3 +26,11 @@ To build a custom ISO, run the `create-iso` script:
 see `./create-iso -h` for usage
 
 This will download an ISO, created a customized layout with installerconfig, install the Triton guesttools then build the custom ISO.
+
+To build the FreeBSD KVM image run the `create-image` script:
+
+```
+./create-image -i <ISO> -n <IMAGE_NAME> -d <DESC> -u <HOMEPAGE> -o <OWNER_UUID> -p <IP> -m NETMASK -g <GATEWAY> -v <VLAN_ID> -U <NETWORK_UUID>
+```
+
+see `./create-image -h` for usage
