@@ -33,7 +33,7 @@ Usage:
   $0 -i <ISO> -n <IMAGE_NAME> -d <DESC> -u <HOMEPAGE> -o <OWNER_UUID> -p <IP> -m NETMASK -g <GATEWAY> -v <VLAN_ID> -U <NETWORK_UUID>
 
 Example:
-  $0 -i binary.iso -n freebsd-10 -d "FreeBSD 10.1 64-bit image with just essential packages installed. Ideal for users who are comfortable with setting up their own environment and tools." -u https://docs.joyent.com/images/kvm/freebsd -o 00000000-0000-0000-0000-000000000000 -p 192.0.2.21 -m <NETMASK> -g <GATEWAY>  -v <VLAN_ID> -U <NETWORK_UUID>
+  $0 -i binary.iso -n freebsd-11 -d "FreeBSD 11.0 64-bit image with just essential packages installed. Ideal for users who are comfortable with setting up their own environment and tools." -u https://docs.joyent.com/images/kvm/freebsd -o 00000000-0000-0000-0000-000000000000 -p 192.0.2.21 -m <NETMASK> -g <GATEWAY>  -v <VLAN_ID> -U <NETWORK_UUID>
     
 OPTIONS:
   -i The ISO
