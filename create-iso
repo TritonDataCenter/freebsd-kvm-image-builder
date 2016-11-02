@@ -10,15 +10,15 @@ CUR_TIME=$(date +%FT%TZ)
 INSTALLER_CFG="installerconfig"
 TRITON_DIST_FILE="triton.txz"
 
-RELEASE="10.2"
-MIRROR="ftp.freebsd.org"
-MIRROR_PATH="pub/FreeBSD/releases/ISO-IMAGES"
-ISO="FreeBSD-${RELEASE}-RELEASE-amd64-disc1.iso"
-ISO_DIR="/data/freebsd-iso"
-ISO_MOUNT="/mnt/freebsd-iso"
-ISO_LAYOUT="/data/custom-freebsd-iso"
-SHA256SUM="CHECKSUM.SHA256-FreeBSD-${RELEASE}-RELEASE-amd64"
-CUSTOM_ISO_FILENAME="freebsd-10-custom.iso"
+RELEASE=
+MIRROR=
+MIRROR_PATH=
+ISO=
+ISO_DIR=
+ISO_MOUNT=
+ISO_LAYOUT=
+ISO_CHECKSUM=
+ISO_FILENAME=
 
 
 usage() {
@@ -48,12 +48,15 @@ OPTIONS:
 EOF
 }
 
-while getopts "hm:i:c:d:M:l:t:f:" OPTION
+while getopts "hr:m:i:c:d:M:l:t:f:" OPTION
 do
   case $OPTION in
     h)
       usage
       exit 1
+      ;;
+    r)
+      RELEASE=${OPTARG}
       ;;
     m)
       MIRROR=${OPTARG%/}
@@ -85,6 +88,11 @@ do
       ;;
   esac
 done
+
+if [[ -z ${RELEASE} ]]; then
+  echo "Error: missing release value (-r)"
+  exit 1
+fi
 
 if [[ -z ${MIRROR} ]]; then
   echo "Error: missing mirror url (-m)"
@@ -136,8 +144,8 @@ function fetch_iso() {
     mkdir -p $ISO_DIR
   fi
   
-  echo "==> Fetching ${SHA256SUM}"
-  curl -o ${ISO_DIR}/${SHA256SUM} ftp://${MIRROR}/${MIRROR_PATH}/${RELEASE}/${SHA256SUM}
+  echo "==> Fetching ${ISO_CHECKSUM}"
+  curl -o ${ISO_DIR}/${ISO_CHECKSUM} ftp://${MIRROR}/${MIRROR_PATH}/${RELEASE}/${ISO_CHECKSUM}
   
   echo "==> Checking for local copy of $ISO..."
   if [[ -e $ISO_DIR/$ISO ]]; then
@@ -150,9 +158,9 @@ function fetch_iso() {
       echo "==> Done!"
       echo "==> ${ISO} saved to $ISO_DIR/"
       
-      echo "==> Verifying $ISO with ${SHA256SUM}"
+      echo "==> Verifying $ISO with ${ISO_CHECKSUM}"
     
-      if [[ "$(sha256 $ISO_DIR/$ISO | cut -f2 -d= | tr -d '[[:space:]]')" == "$(grep "($ISO)" $ISO_DIR/${SHA256SUM} | cut -f2 -d= | tr -d '[[:space:]]')" ]]; then
+      if [[ "$(sha256 $ISO_DIR/$ISO | cut -f2 -d= | tr -d '[[:space:]]')" == "$(grep "($ISO)" $ISO_DIR/${ISO_CHECKSUM} | cut -f2 -d= | tr -d '[[:space:]]')" ]]; then
           echo "==> Checksums match."
       else
           echo "==> Checksums don't match!"
@@ -236,8 +244,8 @@ function create_newiso() {
   mkisofs -J -R -no-emul-boot \
     -V "$CUSTOM_ISO_TITLE" \
     -p "Joyent" -b boot/cdboot \
-    -o $CUSTOM_ISO_FILENAME $ISO_LAYOUT
-  echo "==> Custom ISO now ready: $CUSTOM_ISO_FILENAME"
+    -o $ISO_FILENAME $ISO_LAYOUT
+  echo "==> Custom ISO now ready: $ISO_FILENAME"
 }
 
 echo "==> ISO Build Starting!"
