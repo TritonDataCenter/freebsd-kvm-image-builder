@@ -28,7 +28,7 @@ Create a custom Fedora ISO with the necessary packages and tooling installed
 for deploying on SmartOS, Triton and the Joyent Public Cloud.
 
 Usage:
-  $0 -r <RELEASE> -m <MIRROR> -p <MIRROR_PATH> -i <ISO> -c <ISO_CHECKSUM> -d <ISO_DIR> -M <MOUNT_POINT> -l <ISO_LAYOUT> -f <ISO_FILENAME>
+  $0 -r <RELEASE> -m <MIRROR> -p <MIRROR_PATH> -i <ISO> -c <ISO_CHECKSUM> -d <ISO_DIR> -M <ISO_MOUNT> -l <ISO_LAYOUT> -f <ISO_FILENAME>
 
 Example:
   $0 -r 11.0 -m ftp.freebsd.org -p /pub/FreeBSD/releases/ISO-IMAGES  -i FreeBSD-11.0-RELEASE-amd64-disc1.iso -c CHECKSUM.SHA256-FreeBSD-11.0-RELEASE-amd64 -d /data/freebsd-iso -M /mnt/freebsd-iso -l /data/freebsd-custom-11.0 -f freebsd-11.0-custom.iso
@@ -74,7 +74,7 @@ do
       ISO_DIR=${OPTARG%/}
       ;;
     M)
-      MOUNT_POINT=${OPTARG%/}
+      ISO_MOUNT=${OPTARG%/}
       ;;
     l)
       ISO_LAYOUT=${OPTARG%/}
@@ -119,7 +119,7 @@ if [[ -z ${ISO_DIR} ]]; then
   exit 1
 fi
 
-if [[ -z ${MOUNT_POINT} ]]; then
+if [[ -z ${ISO_MOUNT} ]]; then
   echo "Error: missing mount point directory (-M) value"
   exit 1
 fi
