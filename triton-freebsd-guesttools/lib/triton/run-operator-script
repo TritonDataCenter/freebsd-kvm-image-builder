@@ -5,17 +5,29 @@
 
 . /lib/triton/lib_triton_scripts.cfg
 
-SCRIPT=/tmp/.operator-script
-rm -f $SCRIPT
-$MDATA_GET_BIN sdc:operator-script >$SCRIPT
-if [[ $? -eq 0 && -f $SCRIPT ]] ; then
-    chmod +x $SCRIPT
-    lib_triton_info "executing sdc:operator-script"
-    # TODO: is this abnormally aborting with 'set -e' active?
-    $SCRIPT
-    operator_script_exit=$?
-    if [[ ${operator_script_exit} -gt 0 ]]; then
-        lib_triton_info "WARNING: operator-script failed: exited \
-          ${operator_script_exit}"
-    fi
+lib_triton_info "Retrieving metadata operator-script..."
+$MDATA_GET sdc:operator-script >/var/tmp/mdata-operator-script.new
+case $? in
+  0)
+    lib_triton_info "Metadata operator-script successfuly retrieved."
+    mv /var/tmp/mdata-operator-script{.new,}
+    chmod +x /var/tmp/mdata-operator-script
+    ;;
+  1)
+    lib_triton_info "Metadata operator-script not defined."
+    rm -f /var/tmp/mdata-operator-script{,.new}
+    ;;
+  *)
+    lib_triton_fatal "Metadata couldn't be retrieved."
+    ;;
+esac
+
+if [[ -x /var/tmp/mdata-operator-script ]]; then
+  lib_triton_info "Executing metadata operator-script"
+  /var/tmp/mdata-operator-script
+  operator_script_exit=$?
+  if [[ ${operator_script_exit} -gt 0 ]]; then
+    lib_triton_info "WARNING: operator-script failed: exited \
+      ${operator_script_exit}" >&2
+  fi
 fi

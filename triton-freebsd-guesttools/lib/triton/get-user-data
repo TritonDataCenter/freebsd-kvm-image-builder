@@ -10,16 +10,16 @@
 . /lib/triton/lib_triton_scripts.cfg
 
 lib_triton_info "Retrieving metadata user-data"
-$MDATA_GET_BIN user-data >/var/db/mdata-user-data.new
+$MDATA_GET_BIN user-data >/var/tmp/mdata-user-data.new
 case $? in
   0)
     lib_triton_info "Metadata user-data successfuly retrieved."
-    mv /var/db/mdata-user-data{.new,}
-    lib_triton_info "User-data saved to /var/db/mdata-user-data."
+    mv /var/tmp/mdata-user-data{.new,}
+    lib_triton_info "User-data saved to /var/tmp/mdata-user-data."
     ;;
   1)
     lib_triton_info "Metadata user-data not defined."
-    rm -f /var/db/mdata-user-data{,.new}
+    rm -f /var/tmp/mdata-user-data{,.new}
     ;;
   *)
     lib_triton_info "Metadata couldn't be retrieved."

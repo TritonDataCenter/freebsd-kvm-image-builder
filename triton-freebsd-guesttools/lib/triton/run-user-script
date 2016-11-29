@@ -12,30 +12,28 @@
 # load common functions and vars
 . /lib/triton/lib_triton_scripts.cfg
 
-# set run_userscript_flag to the string TRUE 
-# to remove $USER_SCRIPT_LOCKFILE so that userscript is ran
-run_userscript_flag=$($MDATA_GET_BIN run_userscript_flag 2>>/dev/console)
+lib_triton_info "Retrieving metadata user-script..."
+$MDATA_GET user-script >/var/tmp/mdata-user-script.new
+case $? in
+  0)
+    lib_triton_info "Metadata user-script successfuly retrieved."
+    mv /var/tmp/mdata-user-script{.new,}
+    chmod +x /var/tmp/mdata-user-script
+    ;;
+  1)
+    lib_triton_info "Metadata user-script not defined."
+    rm -f /var/tmp/mdata-user-script{,.new}
+    ;;
+  *)
+    lib_triton_fatal "Metadata couldn't be retrieved."
+    ;;
+esac
 
-# Convert to lowercase
-userscript_flag=$(echo $run_userscript_flag | tr '[:upper:]' '[:lower:]')
-if [[ "$userscript_flag" = "true" ]]; then
-  lib_triton_info "run_userscript_flag field set to: $run_userscript_flag"
-  lib_triton_info "Removing $USER_SCRIPT_LOCKFILE"
-  rm -f $USER_SCRIPT_LOCKFILE 
+user_script_exit=0
+if [[ -x /var/tmp/mdata-user-script ]]; then
+  lib_triton_info "Executing metadata user-script"
+  /var/tmp/mdata-user-script
+  [[ $? -gt 0 ]] && user_script_exit=95
 fi
 
-$MDATA_GET_BIN user-script > $USER_SCRIPT_FILE 2>>/dev/console
-if [[ $? -eq 0 ]] ; then
-    if [[ ! -f $USER_SCRIPT_LOCKFILE ]] ; then
-      touch $USER_SCRIPT_LOCKFILE 
-      chmod +x $USER_SCRIPT_FILE 
-      lib_triton_info "Executing $USER_SCRIPT_FILE"
-      $USER_SCRIPT_FILE
-      lib_triton_info "$USER_SCRIPT_FILE return value is '$?'"
-    else 
-      lib_triton_info "$USER_SCRIPT_LOCKFILE exist - not running \
-        $USER_SCRIPT_FILE"
-    fi
-else
-    lib_triton_info "$MDATA_GET_BIN did not return a valid user-script"
-fi
+exit ${user_script_exit}
