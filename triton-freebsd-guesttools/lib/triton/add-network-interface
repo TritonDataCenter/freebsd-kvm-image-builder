@@ -6,8 +6,6 @@
 # load common functions and vars
 . /lib/triton/lib_triton_scripts.cfg
 
-lib_triton_info "Start of $(basename $0) script"
-
 nic_added=n
 
 for device in $(ifconfig | grep flags | cut -d: -f1); do
@@ -28,7 +26,5 @@ if [[ "$nic_added" == "y" ]]; then
   lib_triton_info "Restarting /etc/rc.d/netif"
   /etc/rc.d/netif restart
 fi
-
-lib_triton_info "End of $(basename $0) script"
 
 exit 0

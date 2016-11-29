@@ -6,8 +6,6 @@
 # load common functions and vars
 . /lib/triton/lib_triton_scripts.cfg
 
-lib_triton_info "Start of $(basename $0) script"
-
 grep hostname= /etc/rc.conf &>/dev/null
 if [[ $? -ne 0 ]]; then
   lib_triton_info "No hostname set in /etc/rc.conf."
@@ -32,7 +30,5 @@ if [[ $? -ne 0 ]]; then
     /etc/rc.d/hostname restart
   fi
 fi
-
-lib_triton_info "End of $(basename $0) script"
 
 exit 0

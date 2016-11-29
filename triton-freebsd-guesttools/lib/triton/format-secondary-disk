@@ -29,8 +29,6 @@ checkformount() {
 
 # Start of Main
 
-lib_triton_info "Start of $(basename $0) script"
-
 # check for device
 if [[ ! -e /dev/${DATADISKDEVICE} ]] ; then
   lib_triton_fatal "secondary disk '/dev/${DATADISKDEVICE}' not found. exiting."
@@ -119,7 +117,5 @@ if [[ "$return_val" -eq 1 ]]; then
 else 
   lib_triton_fatal "no data disk is mounted"
 fi
-
-lib_triton_info "End of $(basename $0) script"
 
 exit 0
