@@ -10,7 +10,7 @@
 . /lib/triton/lib_triton_scripts.cfg
 
 if [[ ! -f /root/.ssh/authorized_keys ]]; then
-    authorized_keys=$($MDATA_GET_BIN root_authorized_keys | awk '{ sub(/(ssh-rsa )/,"\n&"); print }' | awk '{ sub(/(ssh-dss )/,"\n&"); print }' 2>>/dev/console)
+    authorized_keys=$($MDATA_GET root_authorized_keys | awk '{ sub(/(ssh-rsa )/,"\n&"); print }' | awk '{ sub(/(ssh-dss )/,"\n&"); print }' 2>>/dev/console)
     if [[ -n ${authorized_keys} ]]; then
         mkdir -p /root/.ssh
         echo -e "${authorized_keys}" > /root/.ssh/authorized_keys

@@ -10,7 +10,7 @@
 . /lib/triton/lib_triton_scripts.cfg
 
 lib_triton_info "Retrieving metadata user-data"
-$MDATA_GET_BIN user-data >/var/tmp/mdata-user-data.new
+$MDATA_GET user-data >/var/tmp/mdata-user-data.new
 case $? in
   0)
     lib_triton_info "Metadata user-data successfuly retrieved."
