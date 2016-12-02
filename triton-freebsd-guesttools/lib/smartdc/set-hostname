@@ -4,7 +4,7 @@
 # Set the hostname of the VM if it's not already configured by the user.
 
 # load common functions and vars
-. /lib/triton/lib_triton_scripts.cfg
+. /lib/smartdc/lib_triton_scripts.cfg
 
 grep hostname= /etc/rc.conf &>/dev/null
 if [[ $? -ne 0 ]]; then

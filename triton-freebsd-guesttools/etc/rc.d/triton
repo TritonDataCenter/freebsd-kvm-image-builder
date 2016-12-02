@@ -9,12 +9,12 @@
 name="triton"
 stop_cmd=":"
 
-(/lib/triton/add-network-interface)
-(/lib/triton/set-hostname)
-(/lib/triton/set-root-authorized-keys)
-if [ ! -f /lib/triton/.firstboot-complete-do-not-delete ] ; then
-  (/lib/triton/firstboot)
+(/lib/smartdc/add-network-interface)
+(/lib/smartdc/set-hostname)
+(/lib/smartdc/set-root-authorized-keys)
+if [ ! -f /lib/smartdc/.firstboot-complete-do-not-delete ] ; then
+  (/lib/smartdc/firstboot)
 fi
-(/lib/triton/run-operator-script)
-(/lib/triton/get-user-data)
-(/lib/triton/run-user-script)
+(/lib/smartdc/run-operator-script)
+(/lib/smartdc/get-user-data)
+(/lib/smartdc/run-user-script)

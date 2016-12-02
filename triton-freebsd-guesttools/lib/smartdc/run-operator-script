@@ -3,7 +3,7 @@
 # Copyright (c) 2016 Joyent Inc., All rights reserved.
 #
 
-. /lib/triton/lib_triton_scripts.cfg
+. /lib/smartdc/lib_triton_scripts.cfg
 
 lib_triton_info "Retrieving metadata operator-script..."
 $MDATA_GET sdc:operator-script >/var/tmp/mdata-operator-script.new

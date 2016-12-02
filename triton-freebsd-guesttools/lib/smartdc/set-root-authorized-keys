@@ -7,7 +7,7 @@
 # By default this script is called on each boot
 
 # load common functions and vars
-. /lib/triton/lib_triton_scripts.cfg
+. /lib/smartdc/lib_triton_scripts.cfg
 
 if [[ ! -f /root/.ssh/authorized_keys ]]; then
     authorized_keys=$($MDATA_GET root_authorized_keys | awk '{ sub(/(ssh-rsa )/,"\n&"); print }' | awk '{ sub(/(ssh-dss )/,"\n&"); print }' 2>>/dev/console)
