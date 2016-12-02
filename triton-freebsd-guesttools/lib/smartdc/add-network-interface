@@ -4,7 +4,7 @@
 # This script checks new network interfaces for and enables via DHCP at boot.
 
 # load common functions and vars
-. /lib/smartdc/lib_triton_scripts.cfg
+. /lib/smartdc/common.lib
 
 nic_added=n
 

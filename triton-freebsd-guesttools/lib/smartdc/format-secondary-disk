@@ -10,7 +10,7 @@
 # By default we provision the whole disk as one partition
 
 # load common functions and vars
-. /lib/smartdc/lib_triton_scripts.cfg
+. /lib/smartdc/common.lib
 
 DATADISKDEVICE='vtbd1'
 GPART=/sbin/gpart
