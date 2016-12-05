@@ -10,7 +10,7 @@
 # This script is executed on each system boot
 
 # load common functions and vars
-. /lib/triton/lib_triton_scripts.cfg
+. /lib/smartdc/common.lib
 
 lib_triton_info "Retrieving metadata user-script..."
 $MDATA_GET user-script >/var/tmp/mdata-user-script.new
