@@ -2,8 +2,6 @@
 
 This repo creates a custom FreeBSD install ISO and a KVM image for use in SmartOS and Triton.
 
-**WARNING** This repo is a work in progress and most likely contains various bugs and issues.
-
 ## Requirements
 
 This must be run on a FreeBSD machine or VirtualMachine.
