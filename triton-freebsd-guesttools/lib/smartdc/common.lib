@@ -11,7 +11,7 @@ MDATA_GET='/usr/sbin/mdata-get'
 
 # Log output
 LOG='/var/log/triton.log'
-if [[ ! -f $LOG ]] ; then
+if [[ ! -e $LOG ]] ; then
   touch $LOG
 fi
 
