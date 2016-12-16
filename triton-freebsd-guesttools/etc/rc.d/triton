@@ -7,14 +7,15 @@
 . /etc/rc.subr
 
 name="triton"
+
+start_cmd="${name}_start"
 stop_cmd=":"
 
-(/lib/smartdc/add-network-interface)
-(/lib/smartdc/set-hostname)
-(/lib/smartdc/set-root-authorized-keys)
-if [ ! -f /lib/smartdc/.firstboot-complete-do-not-delete ] ; then
-  (/lib/smartdc/firstboot)
-fi
-(/lib/smartdc/run-operator-script)
-(/lib/smartdc/get-user-data)
-(/lib/smartdc/run-user-script)
+load_rc_config $name
+
+triton_start()
+{
+  /lib/smartdc/triton
+}
+
+run_rc_command "$1"
