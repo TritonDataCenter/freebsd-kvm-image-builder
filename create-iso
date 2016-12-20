@@ -24,7 +24,7 @@ ISO_FILENAME=
 usage() {
 cat <<EOF
 
-Create a custom Fedora ISO with the necessary packages and tooling installed 
+Create a custom FreeBSD ISO with the necessary packages and tooling installed 
 for deploying on SmartOS, Triton and the Joyent Public Cloud.
 
 Usage:
