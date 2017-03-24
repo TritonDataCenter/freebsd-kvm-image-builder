@@ -11,8 +11,16 @@ echo "==> Enabling serial and internal consoles"
 echo "-Dh" > /boot.config
 echo "cuau0   \"/usr/libexec/getty std.38400\"  xterm   on  secure" >> /etc/ttys
 
-echo "==> Setting autoboot delay to 5 seconds. Default is 10"
-echo "autoboot_delay=\"5\"" >> /boot/loader.conf
+
+echo "==> Adding boot loader settings"
+cat << BOOT > /boot/loader.conf
+autoboot_delay="5"
+verbose_loading="YES"
+hw.usb.no_pf="1"
+hw.usb.no_boot_wait="1"
+hw.usb.no_shutdown_wait="1"
+hw.memtest.tests="0"
+BOOT
 
 echo "==> Setting up rc.conf"
 cat > /etc/rc.conf << RC_CONF
@@ -49,15 +57,6 @@ env ASSUME_ALWAYS_YES=YES pkg upgrade
 env ASSUME_ALWAYS_YES=YES pkg install bash curl node npm vim wget
 env ASSUME_ALWAYS_YES=YES pkg autoremove
 env ASSUME_ALWAYS_YES=YES pkg clean -a
-
-echo "==> Adding boot loader settings"
-cat << USB > /boot/loader.conf
-verbose_loading="YES"
-hw.usb.no_pf="1"
-hw.usb.no_boot_wait="1"
-hw.usb.no_shutdown_wait="1"
-hw.memtest.tests="0"
-USB
 
 echo "==> Enable root login via ssh"
 sed -i.bak -e s/#PermitRootLogin\ no/PermitRootLogin\ without-password/g /etc/ssh/sshd_config
