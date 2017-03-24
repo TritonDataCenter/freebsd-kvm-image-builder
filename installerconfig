@@ -47,6 +47,7 @@ echo "==> Installing packages"
 env ASSUME_ALWAYS_YES=YES pkg update -f
 env ASSUME_ALWAYS_YES=YES pkg install bash curl node npm vim wget
 env ASSUME_ALWAYS_YES=YES pkg clean -a
+env ASSUME_ALWAYS_YES=YES pkg autoremove
 
 echo "== Enable root login via ssh"
 sed -i.bak -e s/#PermitRootLogin\ no/PermitRootLogin\ without-password/g /etc/ssh/sshd_config
