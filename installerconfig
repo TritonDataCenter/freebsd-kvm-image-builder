@@ -34,6 +34,15 @@ echo "==> Setting Time Zone to UTC"
 /usr/bin/touch /etc/wall_cmos_clock
 /sbin/adjkerntz -a
 
+# Fetch and install binary updates. Ensures we have the latest security fixes.
+echo "==> Running freebsd-update fetch and freebsd-update install"
+# Remove src from update since it's not installed
+# See https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=198030
+sed -i.bak -e s/Components\ src\ world\ kernel/Components\ world\ kernel/g /etc/freebsd-update.conf
+
+env PAGER=cat freebsd-update fetch
+freebsd-update install
+
 echo "==> Installing packages"
 env ASSUME_ALWAYS_YES=YES pkg update -f
 env ASSUME_ALWAYS_YES=YES pkg upgrade
@@ -75,6 +84,7 @@ PRODUCT
 
 echo "Cleaning up"
 rm -rf /tmp/installscript
+rm -rf /var/db/freebsd-update/*
 
 echo "End of installerconfig"
 
