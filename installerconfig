@@ -52,6 +52,7 @@ env ASSUME_ALWAYS_YES=YES pkg clean -a
 
 echo "==> Adding boot loader settings"
 cat << USB > /boot/loader.conf
+verbose_loading="YES"
 hw.usb.no_pf="1"
 hw.usb.no_boot_wait="1"
 hw.usb.no_shutdown_wait="1"
