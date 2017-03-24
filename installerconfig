@@ -44,7 +44,7 @@ env PAGER=cat freebsd-update fetch
 freebsd-update install
 
 echo "==> Installing packages"
-env ASSUME_ALWAYS_YES=YES pkg update
+env ASSUME_ALWAYS_YES=YES pkg update -f
 env ASSUME_ALWAYS_YES=YES pkg install bash curl node npm vim wget
 
 echo "== Enable root login via ssh"
