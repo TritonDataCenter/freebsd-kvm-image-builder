@@ -1,12 +1,12 @@
 #!/bin/sh
 
 # PROVIDE: triton
-
-# Adds support for Triton (and SmartOS)
+# BEFORE: LOGIN
 
 . /etc/rc.subr
 
 name="triton"
+
 
 start_cmd="${name}_start"
 stop_cmd=":"
