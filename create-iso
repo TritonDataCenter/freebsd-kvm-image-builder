@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-IFS=$'\n\t'
-
-TRACE=
-
 if [[ -n "$TRACE" ]]; then
   export PS4='[\D{%FT%TZ}] ${BASH_SOURCE}:${LINENO}: ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
   set -o xtrace
 fi
+
+set -euo pipefail
+IFS=$'\n\t'
 
 INSTALLER_CFG="installerconfig"
 TRITON_DIST_FILE="triton.txz"
@@ -26,7 +24,7 @@ ISO_FILENAME=
 usage() {
 cat <<EOF
 
-Create a custom FreeBSD ISO with the necessary packages and tooling installed 
+Create a custom FreeBSD ISO with the necessary packages and tooling installed
 for deploying on SmartOS, Triton and the Joyent Public Cloud.
 
 Usage:
@@ -145,10 +143,10 @@ fetch_iso() {
 	if [[ ! -d $ISO_DIR ]]; then
 		mkdir -p $ISO_DIR
 	fi
-	
+
 	echo "==> Fetching ${ISO_CHECKSUM}"
 	curl -o ${ISO_DIR}/${ISO_CHECKSUM} ftp://${MIRROR}/${MIRROR_PATH}/${RELEASE}/${ISO_CHECKSUM}
-	
+
 	echo "==> Checking for local copy of $ISO..."
 	if [[ -e $ISO_DIR/$ISO ]]; then
 		echo "==> Found local copy of $ISO"
@@ -178,60 +176,60 @@ create_layout() {
 	fi
 	echo "==> Creating $ISO_LAYOUT"
 	mkdir -p $ISO_LAYOUT
-	
+
 	if [[ ! -d $ISO_MOUNT ]]; then
 		echo "==> Creating $ISO_MOUNT ..."
-		mkdir $ISO_MOUNT 
+		mkdir $ISO_MOUNT
 	fi
-	
+
 	if df | grep -q $ISO_MOUNT; then
 		echo "==> Unmounting previous $ISO_MOUNT..."
 		umount $ISO_MOUNT
 	fi
-	
+
 	echo "==> Mounting $ISO to $ISO_MOUNT"
 	mount -t cd9660 /dev/"$(mdconfig -f $ISO_DIR/$ISO)" $ISO_MOUNT
-	
+
 	echo "==> Copying layout from $ISO_MOUNT to $ISO_LAYOUT"
 	rsync -aq  $ISO_MOUNT/ $ISO_LAYOUT
-	
+
 	echo "==> Copying and integrating Triton guesttools:"
 	# Cleanup previous distribution file
 	[[ -f $TRITON_DIST_FILE ]] && rm $TRITON_DIST_FILE
-	
+
 	( cd triton-freebsd-guesttools
 		tar -cvJpf ../${TRITON_DIST_FILE} ./etc ./lib ./usr
 	)
-	
+
 	DISTFILE_SHASUM_STDOUT=$(shasum -a 256 $TRITON_DIST_FILE)
 	DISTFILE_SHASUM_PLAIN=${DISTFILE_SHASUM_STDOUT% *}
 	DISTFILE_FILECOUNT=$(tar -tf $TRITON_DIST_FILE | wc -l | tr -d ' ')
-	
+
 	echo -e "${TRITON_DIST_FILE}\t${DISTFILE_SHASUM_PLAIN}\t${DISTFILE_FILECOUNT}\t${TRITON_DIST_FILE%.*}\t\"Triton guesttools\"\ton" >> ${ISO_LAYOUT}/usr/freebsd-dist/MANIFEST
-	
+
 	cp $TRITON_DIST_FILE ${ISO_LAYOUT}/usr/freebsd-dist/${TRITON_DIST_FILE}
-	
+
 	echo "==> Copying $INSTALLER_CFG to $ISO_LAYOUT"
 	cp $INSTALLER_CFG $ISO_LAYOUT/etc/
-	
+
 	echo "==> Enable serial and internal consoles"
 	echo "-Dhv" > $ISO_LAYOUT/boot.config
 	echo "cuau0   \"/usr/libexec/getty std.38400\"  xterm   on  secure" >> $ISO_LAYOUT/etc/ttys
-	
+
 	echo "==> Setting autoboot delay to 5 seconds"
 	echo "autoboot_delay=\"5\"" >> $ISO_LAYOUT/boot/loader.conf
-	
+
 	echo "==> Get network up automatically in the blank VM"
 	echo "ifconfig_vtnet0=\"DHCP\"" >> $ISO_LAYOUT/etc/rc.conf
 	echo "ifconfig_vtnet1=\"DHCP\"" >> $ISO_LAYOUT/etc/rc.conf
-	
+
 	echo "==> Remove resolv.conf symlink"
 	rm $ISO_LAYOUT/etc/resolv.conf
-	
+
 	echo "==> Set resolvers in the blank VM"
 	echo "nameserver 8.8.8.8" >> $ISO_LAYOUT/etc/resolv.conf
 	echo "nameserver 8.8.4.4" >> $ISO_LAYOUT/etc/resolv.conf
-	
+
 	echo "==> Unmounting $ISO_MOUNT"
 	umount $ISO_MOUNT
 }
@@ -240,7 +238,7 @@ create_newiso() {
 	echo "==> Getting Volume ID for ${ISO}"
 	CUSTOM_ISO_TITLE=$(isoinfo -d -i ${ISO_DIR}/${ISO} | grep "Volume id" | awk '{print $3}')
 	echo "==> Volume ID is $CUSTOM_ISO_TITLE"
-	
+
 	echo "==> Preparing NEW ISO"
 	mkisofs -J -R -no-emul-boot \
 		-V "$CUSTOM_ISO_TITLE" \
