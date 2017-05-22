@@ -1,7 +1,8 @@
 #!/bin/sh
 
+# REQUIRE: NETWORKING
 # PROVIDE: triton
-# BEFORE: LOGIN
+# BEFORE: SERVERS
 
 . /etc/rc.subr
 
