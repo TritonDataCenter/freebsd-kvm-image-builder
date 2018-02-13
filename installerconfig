@@ -1,6 +1,6 @@
 PARTITIONS=vtbd0
 DISTRIBUTIONS="kernel.txz base.txz triton.txz"
-BSDINSTALL_DISTSITE=ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/11.0-RELEASE
+BSDINSTALL_DISTSITE=ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/11.1-RELEASE
 
 #!/bin/sh
 
@@ -84,7 +84,7 @@ sed -i.bak -e s/#PermitRootLogin\ no/PermitRootLogin\ without-password/g /etc/ss
 
 ## Build date used for motd and product file
 BUILDDATE=$(date +%Y%m%d)
-RELEASE="11.0-RELEASE"
+RELEASE="11.1-RELEASE"
 DOC_URL="https://docs.joyent.com/images/kvm/freebsd"
 
 # Create MOTD
