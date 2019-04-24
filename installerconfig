@@ -1,6 +1,6 @@
 PARTITIONS=vtbd0
 DISTRIBUTIONS="kernel.txz base.txz triton.txz"
-BSDINSTALL_DISTSITE=ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/11.1-RELEASE
+BSDINSTALL_DISTSITE=ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/12.0-RELEASE
 
 #!/bin/sh
 
@@ -75,7 +75,7 @@ env PAGER=cat freebsd-update -f /tmp/freebsd-update.conf install
 echo "==> Installing packages"
 env ASSUME_ALWAYS_YES=YES pkg update -f
 env ASSUME_ALWAYS_YES=YES pkg upgrade -q -y
-env ASSUME_ALWAYS_YES=YES pkg install -q -y bash curl node npm vim-lite wget
+env ASSUME_ALWAYS_YES=YES pkg install -q -y bash curl node npm wget
 env ASSUME_ALWAYS_YES=YES pkg autoremove
 env ASSUME_ALWAYS_YES=YES pkg clean -a
 
@@ -84,7 +84,7 @@ sed -i.bak -e s/#PermitRootLogin\ no/PermitRootLogin\ without-password/g /etc/ss
 
 ## Build date used for motd and product file
 BUILDDATE=$(date +%Y%m%d)
-RELEASE="11.1-RELEASE"
+RELEASE="12.0-RELEASE"
 DOC_URL="https://docs.joyent.com/images/kvm/freebsd"
 
 # Create MOTD
