@@ -6,7 +6,7 @@
 # load common functions and vars
 . /lib/smartdc/common.lib
 
-grep hostname= /etc/rc.conf &>/dev/null
+/sbin/sysrc -q -c hostname
 if [[ $? -ne 0 ]]; then
   lib_triton_info "No hostname set in /etc/rc.conf."
   hostname=$($MDATA_GET sdc:hostname) && \
