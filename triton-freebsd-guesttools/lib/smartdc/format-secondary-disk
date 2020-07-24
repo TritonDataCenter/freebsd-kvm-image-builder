@@ -59,9 +59,9 @@ fi
 
 # making partition table
 lib_triton_info "creating gpt partition type /dev/${DATADISKDEVICE}"
-gpart create -s gpt $DATADISKDEVICE
+$GPART create -s gpt $DATADISKDEVICE
 
-DISKSIZE=$(gpart show /dev/${DATADISKDEVICE} | grep free | cut -d'-' -f3 | cut -d'(' -f2 | cut -d')' -f1)
+DISKSIZE=$($GPART show /dev/${DATADISKDEVICE} | grep free | cut -d'-' -f3 | cut -d'(' -f2 | cut -d')' -f1)
 
 lib_triton_info "disksize is $DISKSIZE on $DATADISKDEVICE"
 
@@ -73,7 +73,7 @@ lib_triton_info "sleeping for update of partition table for /dev/${DATADISKDEVIC
 sleep 2
 
 # creating a single partition for the whole disk, formatting it, and mounting it
-gpart add -t freebsd-ufs ${DATADISKDEVICE} 
+$GPART add -t freebsd-ufs ${DATADISKDEVICE} 
 
 if [[ -e /dev/${DATADISKDEVICE}p1 ]] ; then
    lib_triton_info "creating new filesystem on /dev/${DATADISKDEVICE}p1"

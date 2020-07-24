@@ -24,7 +24,8 @@ done
 
 if [[ "$nic_added" == "y" ]]; then
   lib_triton_info "Restarting /etc/rc.d/netif"
-  /etc/rc.d/netif restart
+  /etc/rc.d/netif restart && \
+  /etc/rc.d/routing restart
 fi
 
 exit 0
